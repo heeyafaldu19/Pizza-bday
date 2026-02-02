@@ -1,217 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dough to Destiny 🍕</title>
-
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: radial-gradient(#ffe8c7, #f7b267);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #FFF5E5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-.game {
-  width: 360px;
-  height: 640px;
-  background: #fff7ef;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.25);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+  .game-container {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    height: 90vh;
+    background: #FFF8F0;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    padding: 20px;
+  }
 
-.title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-}
+  h1 {
+    text-align: center;
+    color: #FF6F3C;
+    margin: 10px 0;
+  }
 
-.stage {
-  flex: 1;
-  background: #fff;
-  border-radius: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
-  position: relative;
-  user-select: none;
-}
+  .step {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 
-.hidden {
-  display: none;
-}
+  .step.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+  }
 
-.btn {
-  background: #ff7b00;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 16px;
-  cursor: pointer;
-}
+  @keyframes fadeIn {
+    from {opacity:0;}
+    to {opacity:1;}
+  }
 
-.progress {
-  height: 6px;
-  background: #eee;
-  border-radius: 6px;
-  overflow: hidden;
-}
+  .bowl, .oven, .pizza {
+    width: 200px;
+    height: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 20px 0;
+  }
 
-.fill {
-  width: 0%;
-  height: 100%;
-  background: #ff7b00;
-  transition: width .3s;
-}
+  .ingredient {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    cursor: grab;
+  }
 
-.pizza {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: #f3e5ab;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .progress-bar {
+    width: 80%;
+    height: 15px;
+    background: #FFC1A1;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
 
-.sauce {
-  width: 140px;
-  height: 140px;
-  background: #d62828;
-  border-radius: 50%;
-  display: none;
-}
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #FF6F3C;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
 
-.cheese {
-  width: 120px;
-  height: 120px;
-  background: #ffd966;
-  border-radius: 50%;
-  display: none;
-}
+  button {
+    background: #FF6F3C;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
 
-.topping {
-  position: absolute;
-  font-size: 20px;
-}
+  /* Drag hover effect */
+  .bowl.hovered {
+    box-shadow: 0 0 15px #FF6F3C inset;
+  }
+
 </style>
 </head>
-
 <body>
 
-<div class="game">
-  <div class="title">Dough to Destiny 🍕</div>
+<div class="game-container">
 
-  <div class="progress"><div class="fill" id="fill"></div></div>
+  <h1>Dough to Destiny 🍕</h1>
 
-  <div class="stage" id="stage">
-    Tap to knead dough 🥣
+  <!-- Step 1: Dough Prep -->
+  <div class="step active" id="step-1">
+    <div class="bowl" id="bowl" style="background-image:url('https://i.imgur.com/GW1jq8b.png');"></div>
+    <div class="ingredient" id="flour" style="background-image:url('https://i.imgur.com/yj0lU1R.png'); left:50px; top:400px;"></div>
+    <div class="ingredient" id="water" style="background-image:url('https://i.imgur.com/EZL2P2y.png'); left:150px; top:400px;"></div>
+    <div class="ingredient" id="yeast" style="background-image:url('https://i.imgur.com/vV0Yz6U.png'); left:250px; top:400px;"></div>
+    <p>Drag ingredients into the bowl to make dough!</p>
   </div>
 
-  <button class="btn hidden" id="actionBtn">Continue</button>
+  <!-- Step 2: Shape Base -->
+  <div class="step" id="step-2">
+    <div class="bowl" style="background-image:url('https://i.imgur.com/7vH1n1r.png');"></div>
+    <p>Swipe to roll the dough!</p>
+  </div>
+
+  <!-- Step 3: Sauce -->
+  <div class="step" id="step-3">
+    <div class="bowl" style="background-image:url('https://i.imgur.com/7vH1n1r.png');"></div>
+    <p>Spread the sauce in circular motion!</p>
+  </div>
+
+  <!-- Step 4: Cheese -->
+  <div class="step" id="step-4">
+    <div class="bowl" style="background-image:url('https://i.imgur.com/7vH1n1r.png');"></div>
+    <p>Tap to sprinkle cheese!</p>
+  </div>
+
+  <!-- Step 5: Toppings -->
+  <div class="step" id="step-5">
+    <div class="bowl" style="background-image:url('https://i.imgur.com/7vH1n1r.png');"></div>
+    <p>Drag toppings freely!</p>
+  </div>
+
+  <!-- Step 6: Bake -->
+  <div class="step" id="step-6">
+    <div class="oven" style="background-image:url('https://i.imgur.com/Vf6nL1R.png');"></div>
+    <button id="bake-btn">Slide pizza into oven</button>
+  </div>
+
+  <!-- Step 7: Eat -->
+  <div class="step" id="step-7">
+    <div class="pizza" style="background-image:url('https://i.imgur.com/5yLZV4y.png');"></div>
+    <p>Tap slices to enjoy!</p>
+  </div>
+
+  <!-- Final Step -->
+  <div class="step" id="step-8">
+    <p style="font-size:22px; color:#FF6F3C;">🍕 Made with love. And eaten with joy! ❤️</p>
+    <button onclick="location.reload()">Play Again</button>
+  </div>
+
 </div>
 
 <script>
-let step = 0;
-let progress = 0;
-const fill = document.getElementById("fill");
-const stage = document.getElementById("stage");
-const btn = document.getElementById("actionBtn");
+  let currentStep = 1;
 
-function updateProgress(val) {
-  progress += val;
-  fill.style.width = progress + "%";
-}
-
-stage.addEventListener("click", () => {
-  if (step === 0) {
-    updateProgress(25);
-    stage.innerText = "Dough feels smooth ✨";
-    btn.classList.remove("hidden");
-  }
-});
-
-btn.addEventListener("click", () => {
-  btn.classList.add("hidden");
-  step++;
-
-  if (step === 1) {
-    updateProgress(15);
-    stage.innerHTML = `<div class="pizza" id="pizza"></div>`;
-    stage.insertAdjacentText("beforeend", " Swipe to roll dough");
-    enableSwipe();
-  }
-
-  if (step === 2) {
-    updateProgress(15);
-    const pizza = document.getElementById("pizza");
-    const sauce = document.createElement("div");
-    sauce.className = "sauce";
-    sauce.style.display = "block";
-    pizza.appendChild(sauce);
-    stage.insertAdjacentText("beforeend", " Tap to spread sauce");
+  // Step 1: Drag ingredients
+  function makeDraggable(el, bowlEl) {
+    let offsetX, offsetY, isDragging=false;
+    el.addEventListener('mousedown', startDrag);
+    el.addEventListener('touchstart', startDrag);
+    function startDrag(e){
+      isDragging = true;
+      let rect = el.getBoundingClientRect();
+      offsetX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      offsetY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    }
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('touchmove', drag);
+    function drag(e){
+      if(!isDragging) return;
+      el.style.left = (e.touches ? e.touches[0].clientX : e.clientX) - offsetX + 'px';
+      el.style.top = (e.touches ? e.touches[0].clientY : e.clientY) - offsetY + 'px';
+    }
+    document.addEventListener('mouseup', drop);
+    document.addEventListener('touchend', drop);
+    function drop(e){
+      if(!isDragging) return;
+      isDragging=false;
+      let bowlRect = bowlEl.getBoundingClientRect();
+      let elRect = el.getBoundingClientRect();
+      if(elRect.left+elRect.width/2 > bowlRect.left &&
+         elRect.left+elRect.width/2 < bowlRect.right &&
+         elRect.top+elRect.height/2 > bowlRect.top &&
+         elRect.top+elRect.height/2 < bowlRect.bottom){
+           el.style.display='none';
+           checkAllIngredients();
+      }
+    }
   }
 
-  if (step === 3) {
-    updateProgress(15);
-    const pizza = document.getElementById("pizza");
-    const cheese = document.createElement("div");
-    cheese.className = "cheese";
-    cheese.style.display = "block";
-    pizza.appendChild(cheese);
-    stage.insertAdjacentText("beforeend", " Sprinkle cheese 🧀");
-  }
-
-  if (step === 4) {
-    updateProgress(15);
-    stage.insertAdjacentText("beforeend", " Add toppings 🍄🫒");
-    addToppings();
-  }
-
-  if (step === 5) {
-    updateProgress(15);
-    stage.innerText = "🔥 Baking...";
-    setTimeout(() => {
-      stage.innerText = "Tap to eat 🍕";
-    }, 2000);
-  }
-
-  if (step === 6) {
-    updateProgress(15);
-    stage.innerText = "Made with love. Eaten with joy ❤️";
-  }
-});
-
-function enableSwipe() {
-  let startX = 0;
-  stage.addEventListener("touchstart", e => startX = e.touches[0].clientX);
-  stage.addEventListener("touchmove", e => {
-    const dx = e.touches[0].clientX - startX;
-    if (Math.abs(dx) > 30) btn.classList.remove("hidden");
+  const bowl = document.getElementById('bowl');
+  const ingredients = ['flour','water','yeast'];
+  let collected=0;
+  ingredients.forEach(id=>{
+    makeDraggable(document.getElementById(id), bowl);
   });
-}
 
-function addToppings() {
-  ["🍄","🫒","🌶️"].forEach((t,i)=>{
-    const el = document.createElement("div");
-    el.className = "topping";
-    el.innerText = t;
-    el.style.top = 100 + i*20 + "px";
-    el.style.left = 150 + i*20 + "px";
-    stage.appendChild(el);
-  });
-}
+  function checkAllIngredients(){
+    collected++;
+    if(collected===ingredients.length){
+      nextStep();
+    }
+  }
+
+  function nextStep(){
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    currentStep++;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+  }
+
+  // Step 2: Shape Base - swipe
+  const step2 = document.getElementById('step-2');
+  step2.addEventListener('mousemove', rollDough);
+  step2.addEventListener('touchmove', rollDough);
+  function rollDough(e){
+    nextStep();
+    step2.removeEventListener('mousemove', rollDough);
+    step2.removeEventListener('touchmove', rollDough);
+  }
+
+  // Step 3: Sauce - swipe
+  const step3 = document.getElementById('step-3');
+  step3.addEventListener('mousemove', spreadSauce);
+  step3.addEventListener('touchmove', spreadSauce);
+  function spreadSauce(e){
+    nextStep();
+    step3.removeEventListener('mousemove', spreadSauce);
+    step3.removeEventListener('touchmove', spreadSauce);
+  }
+
+  // Step 4: Cheese - tap
+  const step4 = document.getElementById('step-4');
+  step4.addEventListener('click', sprinkleCheese);
+  step4.addEventListener('touchstart', sprinkleCheese);
+  function sprinkleCheese(){
+    nextStep();
+  }
+
+  // Step 5: Toppings - drag freely
+  const step5 = document.getElementById('step-5');
+  step5.addEventListener('click', placeToppings);
+  step5.addEventListener('touchstart', placeToppings);
+  function placeToppings(){
+    nextStep();
+  }
+
+  // Step 6: Bake
+  document.getElementById('bake-btn').addEventListener('click', nextStep);
+
+  // Step 7: Eat
+  const step7 = document.getElementById('step-7');
+  step7.addEventListener('click', nextStep);
+  step7.addEventListener('touchstart', nextStep);
+
 </script>
 
 </body>
