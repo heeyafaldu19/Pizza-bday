@@ -1,141 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Cooking With Love 🍕</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dough to Destiny 🍕</title>
 
 <style>
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:linear-gradient(180deg,#1a1f3c,#2d3369);
-  color:#f1f3ff;
-  text-align:center;
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(#ffe8c7, #f7b267);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
-section{
-  min-height:100vh;
-  padding:60px 20px;
+.game {
+  width: 360px;
+  height: 640px;
+  background: #fff7ef;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-h1,h2{
-  font-family:'Playfair Display',serif;
+.title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.card{
-  max-width:720px;
-  margin:40px auto;
-  background:rgba(255,255,255,0.08);
-  padding:35px;
-  border-radius:22px;
-  box-shadow:0 0 30px rgba(180,190,255,0.15);
+.stage {
+  flex: 1;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  position: relative;
+  user-select: none;
 }
 
-.step-img{
-  width:260px;
-  border-radius:18px;
-  margin:20px 0;
+.hidden {
+  display: none;
 }
 
-button{
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.4);
-  color:white;
-  padding:14px 32px;
-  border-radius:30px;
-  cursor:pointer;
-  margin-top:25px;
-  font-size:15px;
+.btn {
+  background: #ff7b00;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-button:hover{
-  background:rgba(255,255,255,0.25);
+.progress {
+  height: 6px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.hidden{display:none;}
+.fill {
+  width: 0%;
+  height: 100%;
+  background: #ff7b00;
+  transition: width .3s;
+}
+
+.pizza {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: #f3e5ab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sauce {
+  width: 140px;
+  height: 140px;
+  background: #d62828;
+  border-radius: 50%;
+  display: none;
+}
+
+.cheese {
+  width: 120px;
+  height: 120px;
+  background: #ffd966;
+  border-radius: 50%;
+  display: none;
+}
+
+.topping {
+  position: absolute;
+  font-size: 20px;
+}
 </style>
 </head>
 
 <body>
 
-<section>
-  <h1>🍓 Cooking With You</h1>
-  <p>This is not a game.<br>This is us, making something slowly.</p>
+<div class="game">
+  <div class="title">Dough to Destiny 🍕</div>
 
-  <div class="card" id="gameCard">
-    <h2 id="stepTitle">Step 1: Making the Dough</h2>
-    <img id="stepImg" class="step-img" src="https://images.unsplash.com/photo-1600628422019-efc3c2d36d8a" alt="">
-    <p id="stepText">
-      Strong hands, soft patience.<br>
-      You knead the dough like you handle life — steady and sure.
-    </p>
-    <button onclick="nextStep()">Continue 🍕</button>
+  <div class="progress"><div class="fill" id="fill"></div></div>
+
+  <div class="stage" id="stage">
+    Tap to knead dough 🥣
   </div>
-</section>
+
+  <button class="btn hidden" id="actionBtn">Continue</button>
+</div>
 
 <script>
-const steps = [
-  {
-    title:"Step 1: Making the Dough",
-    img:"https://images.unsplash.com/photo-1600628422019-efc3c2d36d8a",
-    text:"Strong hands, soft patience.<br>You knead the dough like you handle life — steady and sure."
-  },
-  {
-    title:"Step 2: Letting It Rest",
-    img:"https://images.unsplash.com/photo-1598514982314-86f8e2c44f1c",
-    text:"Some things grow quietly.<br>Just like you, when no one is watching."
-  },
-  {
-    title:"Step 3: Spreading the Sauce",
-    img:"https://images.unsplash.com/photo-1604909052743-94e838986d24",
-    text:"A little spice, a lot of heart.<br>You always know the right balance."
-  },
-  {
-    title:"Step 4: Adding the Cheese",
-    img:"https://images.unsplash.com/photo-1617196034183-421b4917c92f",
-    text:"Generous. Always.<br>Because you never do things halfway."
-  },
-  {
-    title:"Step 5: Choosing Toppings",
-    img:"https://images.unsplash.com/photo-1601924638867-3ec62b6b7c7a",
-    text:"Extra, but in the best way.<br>Life with you is never boring."
-  },
-  {
-    title:"Step 6: Into the Oven",
-    img:"https://images.unsplash.com/photo-1601050690597-df0568f70950",
-    text:"Trusting the process.<br>You’ve learned that good things take time."
-  },
-  {
-    title:"Step 7: Ready to Eat",
-    img:"https://images.unsplash.com/photo-1594007654729-407eedc4be65",
-    text:"Perfect, warm, comforting.<br>Just like the way you make me feel."
+let step = 0;
+let progress = 0;
+const fill = document.getElementById("fill");
+const stage = document.getElementById("stage");
+const btn = document.getElementById("actionBtn");
+
+function updateProgress(val) {
+  progress += val;
+  fill.style.width = progress + "%";
+}
+
+stage.addEventListener("click", () => {
+  if (step === 0) {
+    updateProgress(25);
+    stage.innerText = "Dough feels smooth ✨";
+    btn.classList.remove("hidden");
   }
-];
+});
 
-let current = 0;
+btn.addEventListener("click", () => {
+  btn.classList.add("hidden");
+  step++;
 
-function nextStep(){
-  current++;
-  if(current >= steps.length){
-    document.getElementById("gameCard").innerHTML = `
-      <h2>🍕 Pizza Made</h2>
-      <p>
-        You didn’t rush.<br>
-        You didn’t skip steps.<br><br>
-        And that’s why it turned out perfect.
-        <br><br>
-        Just like you.
-      </p>
-      <p>Now come, let’s eat together 😌💙</p>
-    `;
-    return;
+  if (step === 1) {
+    updateProgress(15);
+    stage.innerHTML = `<div class="pizza" id="pizza"></div>`;
+    stage.insertAdjacentText("beforeend", " Swipe to roll dough");
+    enableSwipe();
   }
 
-  document.getElementById("stepTitle").innerHTML = steps[current].title;
-  document.getElementById("stepImg").src = steps[current].img;
-  document.getElementById("stepText").innerHTML = steps[current].text;
+  if (step === 2) {
+    updateProgress(15);
+    const pizza = document.getElementById("pizza");
+    const sauce = document.createElement("div");
+    sauce.className = "sauce";
+    sauce.style.display = "block";
+    pizza.appendChild(sauce);
+    stage.insertAdjacentText("beforeend", " Tap to spread sauce");
+  }
+
+  if (step === 3) {
+    updateProgress(15);
+    const pizza = document.getElementById("pizza");
+    const cheese = document.createElement("div");
+    cheese.className = "cheese";
+    cheese.style.display = "block";
+    pizza.appendChild(cheese);
+    stage.insertAdjacentText("beforeend", " Sprinkle cheese 🧀");
+  }
+
+  if (step === 4) {
+    updateProgress(15);
+    stage.insertAdjacentText("beforeend", " Add toppings 🍄🫒");
+    addToppings();
+  }
+
+  if (step === 5) {
+    updateProgress(15);
+    stage.innerText = "🔥 Baking...";
+    setTimeout(() => {
+      stage.innerText = "Tap to eat 🍕";
+    }, 2000);
+  }
+
+  if (step === 6) {
+    updateProgress(15);
+    stage.innerText = "Made with love. Eaten with joy ❤️";
+  }
+});
+
+function enableSwipe() {
+  let startX = 0;
+  stage.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  stage.addEventListener("touchmove", e => {
+    const dx = e.touches[0].clientX - startX;
+    if (Math.abs(dx) > 30) btn.classList.remove("hidden");
+  });
+}
+
+function addToppings() {
+  ["🍄","🫒","🌶️"].forEach((t,i)=>{
+    const el = document.createElement("div");
+    el.className = "topping";
+    el.innerText = t;
+    el.style.top = 100 + i*20 + "px";
+    el.style.left = 150 + i*20 + "px";
+    stage.appendChild(el);
+  });
 }
 </script>
 
